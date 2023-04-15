@@ -1,203 +1,84 @@
-# import tkinter as tk
+import tkinter as tk
 
-# class QuizRunner:
-#     def __init__(self, master):
-#         self.master = master
-#         master.title("QuizRunner")
+class SurveyApplication(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Опрос")
+        self.geometry("500x500")
+        self.create_widgets()
+        self.question_index = 0
+        self.questions = []
 
-#         # create and place widgets
-#         self.question_label = tk.Label(master, text="Question:")
-#         self.question_label.grid(row=0, column=0)
+    def create_widgets(self):
+        # Создаем метку для заголовка опроса
+        self.title_label = tk.Label(self, text="Заголовок опроса")
+        self.title_label.pack()
 
-#         self.question_entry = tk.Entry(master)
-#         self.question_entry.grid(row=0, column=1)
+        # Создаем метку для вопроса
+        self.question_label = tk.Label(self, text="Вопрос")
+        self.question_label.pack()
 
-#         self.answer_label = tk.Label(master, text="Answer:")
-#         self.answer_label.grid(row=1, column=0)
+        # Создаем поле для ввода вопроса
+        self.question_entry = tk.Entry(self)
+        self.question_entry.pack()
 
-#         self.answer_entry = tk.Entry(master)
-#         self.answer_entry.grid(row=1, column=1)
+        # Создаем метку для ответа
+        self.answer_label = tk.Label(self, text="Ответ")
+        self.answer_label.pack()
 
-#         self.add_button = tk.Button(master, text="Add", command=self.add_question)
-#         self.add_button.grid(row=2, column=0)
+        # Создаем поле для ввода ответа
+        self.answer_entry = tk.Entry(self)
+        self.answer_entry.pack()
 
-#         self.start_button = tk.Button(master, text="Start", command=self.start_quiz)
-#         self.start_button.grid(row=2, column=1)
+        # Создаем кнопку для добавления нового вопроса
+        self.add_question_button = tk.Button(self, text="Добавить вопрос", command=self.add_question)
+        self.add_question_button.pack()
 
-#         self.question_listbox = tk.Listbox(master)
-#         self.question_listbox.grid(row=3, column=0, columnspan=2)
+        # Создаем кнопку для отправки ответа
+        self.submit_button = tk.Button(self, text="Отправить", command=self.submit_answer)
+        self.submit_button.pack()
 
-#     def add_question(self):
-#         question = self.question_entry.get()
-#         answer = self.answer_entry.get()
-#         self.question_listbox.insert(tk.END, f"{question} - {answer}")
-#         self.question_entry.delete(0, tk.END)
-#         self.answer_entry.delete(0, tk.END)
+    def add_question(self):
+        # Получаем текст вопроса и ответа
+        question_text = self.question_entry.get()
+        answer_text = self.answer_entry.get()
 
-#     def start_quiz(self):
-#     # Hide the question input fields and start button
-#         self.question_label.grid_remove()
-#         self.question_entry.grid_remove()
-#         self.answer_label.grid_remove()
-#         self.answer_entry.grid_remove()
-#         self.add_button.grid_remove()
-#         self.start_button.grid_remove()
+        # Создаем новый вопрос и добавляем его в список вопросов
+        question = {'question': question_text, 'answer': answer_text}
+        self.questions.append(question)
 
-#         # Display the quiz questions and answer input fields
-#         questions = [self.question_listbox.get(idx) for idx in range(self.question_listbox.size())]
-#         self.current_question_idx = 0
-#         self.num_correct_answers = 0
+        # Очищаем поля для ввода вопроса и ответа
+        self.question_entry.delete(0, tk.END)
+        self.answer_entry.delete(0, tk.END)
 
-#         self.quiz_question_label = tk.Label(self.master, text=questions[self.current_question_idx])
-#         self.quiz_question_label.grid(row=0, column=0)
+    def submit_answer(self):
+        # Получаем ответ на вопрос
+        answer = self.answer_entry.get()
 
-#         self.quiz_answer_entry = tk.Entry(self.master)
-#         self.quiz_answer_entry.grid(row=1, column=0)
+        # Обрабатываем ответ на вопрос
+        # Здесь можно сохранять ответы в базу данных или файл
+        question = self.questions[self.question_index]
+        is_correct = answer.lower() == question['answer'].lower()
+        self.show_result(is_correct)
 
-#         self.quiz_submit_button = tk.Button(self.master, text="Submit", command=self.submit_answer)
-#         self.quiz_submit_button.grid(row=2, column=0)
+        # Очищаем поле для ввода ответа
+        self.answer_entry.delete(0, tk.END)
 
-#         self.quiz_progress_label = tk.Label(self.master, text=f"{self.current_question_idx + 1}/{len(questions)}")
-#         self.quiz_progress_label.grid(row=3, column=0)
+        # Переключаемся на следующий вопрос (если есть)
+        self.question_index += 1
+        if self.question_index < len(self.questions):
+            question = self.questions[self.question_index]
+            self.title_label.config(text="Опрос")
+            self.question_label.config(text=question['question'])
+        else:
+            self.title_label.config(text="Опрос завершен")
 
-#         self.time_remaining_label = tk.Label(self.master, text=f"Time remaining: {self.time_limit} seconds")
-#         self.time_remaining_label.grid(row=4, column=0)
+    def show_result(self, is_correct):
+        # Создаем метку для вывода результата
+        result_text = "Верно!" if is_correct else "Неверно!"
+        result_label = tk.Label(self, text=result_text)
+        result_label.pack()
 
-#         self.timer = threading.Timer(self.time_limit, self.display_results)
-#         self.timer.start()
-
-    # def submit_answer(self):
-    #     # Check the user's answer and display the next question
-    #     questions = [self.question_listbox.get(idx) for idx in range(self.question_listbox.size())]
-    #     current_question = questions[self.current_question_idx]
-    #     question, answer = current_question.split(" - ")
-    #     user_answer = self.quiz_answer_entry.get().strip().lower()
-
-    #     if user_answer == answer.lower():
-    #         self.num_correct_answers += 1
-
-    #     self.quiz_answer_entry.delete(0, tk.END)
-    #     self.current_question_idx += 1
-
-    #     if self.current_question_idx < len(questions):
-    #         self.quiz_question_label.config(text=questions[self.current_question_idx])
-    #         self.quiz_progress_label.config(text=f"{self.current_question_idx + 1}/{len(questions)}")
-    #     else:
-    #         self.display_results()
-
-    # def display_results(self):
-    #     # Display the user's score and reset the quiz
-    #     num_questions = self.question_listbox.size()
-    #     score = self.num_correct_answers / num_questions * 100
-    #     score_message = f"You answered {self.num_correct_answers} out of {num_questions} questions correctly. Your score is {score:.2f}%."
-    #     self.quiz_question_label.config(text=score_message)
-    #     self.quiz_answer_entry.grid_remove()
-    #     self.quiz_submit_button.grid_remove()
-    #     self.quiz_progress_label.grid_remove()
-
-    #     self.restart_button = tk.Button(self.master, text="Restart", command=self.restart_quiz)
-    #     self.restart_button.grid(row=2, column=0)
-
-    # def restart_quiz(self):
-    #     # Reset the quiz to the beginning
-    #     self.quiz_question_label.destroy()
-    #     self.quiz_answer_entry.destroy()
-    #     self.quiz_submit_button.destroy()
-    #     self.quiz_progress_label.destroy()
-    #     self.restart_button.destroy()
-    #     self.question_label.grid()
-    #     self.question_entry.grid()
-    #     self.answer_label.grid()
-    #     self.answer_entry.grid()
-    #     self.add_button.grid()
-    #     self.start_button.grid()
-    #     self.question_listbox.delete(0, tk.END)
-    #     self.current_question_idx = 0
-    #     self.num_correct_answers = 0
-
-# root = tk.Tk()
-# app = QuizRunner(root)
-# root.mainloop()
-
-from tkinter import *
-import sqlite3
-
-root = Tk()
-root.title("Опросы")
-
-question_label = Label(root, text="Введите вопрос:")
-question_label.grid(row=0, column=0, padx=10, pady=10)
-
-question_entry = Entry(root, width=50)
-question_entry.grid(row=0, column=1, padx=10, pady=10)
-
-answer_label = Label(root, text="Введите верный ответ:")
-answer_label.grid(row=1, column=0, padx=10, pady=10)
-
-answer_entry = Entry(root, width=50)
-answer_entry.grid(row=1, column=1, padx=10, pady=10)
-
-conn = sqlite3.connect("questions.db")
-cursor = conn.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS questions (id INTEGER PRIMARY KEY, question TEXT, answer TEXT)")
-conn.commit()
-
-def save_question():
-    question = question_entry.get()
-    answer = answer_entry.get()
-
-    cursor.execute("INSERT INTO questions (question, answer) VALUES (?, ?)", (question, answer))
-    conn.commit()
-
-save_button = Button(root, text="Сохранить", command=save_question)
-save_button.grid(row=2, column=0, padx=10, pady=10)
-
-def start_quiz():
-    questions = []
-    answers = []
-
-    cursor.execute("SELECT  FROM questions")
-    rows = cursor.fetchall()
-
-    for row in rows:
-        question, answer = row
-        questions.append(question)
-        answers.append(answer)
-
-    quizlabel = Label(root, text="Ответьте на вопросы:")
-    quizlabel.grid(row=3, column=0, padx=10, pady=10)
-
-    for i in range(len(questions)):
-        questionlabel = Label(root, text=questions[i])
-        questionlabel.grid(row=i+4, column=0, padx=10, pady=10)
-
-        answerentry = Entry(root, width=50)
-        answerentry.grid(row=i+4, column=1, padx=10, pady=10)
-
-    submitbutton = Button(root, text="Проверить", command=lambda: checkanswers(answers))
-    submitbutton.grid(row=len(questions)+5, column=0, padx=10, pady=10)
-
-def checkanswers(answers):
-    useranswers = []
-
-    for i in range(len(answers)):
-        answer = root.gridslaves(row=i+4, column=1).get()
-        useranswers.append(answer)
-
-    correct = 0
-    for i in range(len(answers)):
-        if useranswers.lower() == answers.lower():
-            correct += 1
-
-    result_label = Label(root, text=f"Вы ответили правильно на {correct} из {len(answers)} вопросов.")
-    result_label.grid(row=len(answers)+6, column=0, padx=10, pady=10)
-
-menu = Menu(root)
-root.config(menu=menu)
-
-file_menu = Menu(menu)
-menu.add_cascade(label="Файл", menu=file_menu)
-file_menu.add_command(label="Новый вопрос", command=lambda: root.focus())
-file_menu.add_command(label="Начать опрос", command=start_quiz)
-
-root.mainloop()
+if __name__ == '__main__':
+    app = SurveyApplication()
+    app.mainloop()
