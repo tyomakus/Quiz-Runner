@@ -38,6 +38,10 @@ class SurveyApplication(tk.Tk):
         self.submit_button = tk.Button(self, text="Отправить", command=self.submit_answer)
         self.submit_button.pack()
 
+        #Создаем кнопку для подтверждения оконченности создания опроса
+        self.submit_quiz_button = tk.Button(self, text = "Подтвердить", command=self.submit_quiz)
+        self.submit_quiz_button.pack()
+
     def add_question(self):
         # Получаем текст вопроса и ответа
         question_text = self.question_entry.get()
@@ -72,6 +76,9 @@ class SurveyApplication(tk.Tk):
             self.question_label.config(text=question['question'])
         else:
             self.title_label.config(text="Опрос завершен")
+        
+    def submit_quiz(self):
+            pass
 
     def show_result(self, is_correct):
         # Создаем метку для вывода результата
