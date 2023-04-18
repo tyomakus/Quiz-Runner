@@ -5,16 +5,34 @@ class SurveyApplication(tk.Tk):
         super().__init__()
         self.title("Опрос")
         self.geometry("500x500")
-        self.create_widgets()
+        self.title_quiz()
         self.question_index = 0
         self.questions = []
         self.result_counter = 0
 
-    def create_widgets(self):
-        # Создаем метку для заголовка опроса
-        self.title_label = tk.Label(self, text="Заголовок опроса")
+    def show_title(self):
+        #Имя опросику меняем
+        self.title_label["text"] = self.title_entry.get()
         self.title_label.pack()
+        #Чистим
+        self.title_entry.pack_forget()
+        self.submit_title_btn.pack_forget()
+        #Запускаем
+        self.create_widgets()
 
+
+    def title_quiz(self):
+        # Создаем метку для заголовка опроса
+        self.title_label = tk.Label(self, text= "Введите название опроса:")
+        self.title_label.pack()
+        self.submit_title_btn = tk.Button(text="Подтвердить", command=self.show_title)
+        self.submit_title_btn.pack()
+        self.title_entry = tk.Entry(self)
+        self.title_entry.pack()
+        
+
+    def create_widgets(self):
+        
         # Создаем метку для вопроса
         self.question_label = tk.Label(self, text="Вопрос")
         self.question_label.pack()
@@ -45,7 +63,7 @@ class SurveyApplication(tk.Tk):
 
     def result_count(self):
     #Считаем общий балл
-        result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter)))
+        result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter) + "/" + str(len(self.questions))), font=(12))
         result_count_label.pack(side=tk.BOTTOM)
 
     def add_question(self):
