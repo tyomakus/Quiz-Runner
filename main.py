@@ -3,7 +3,7 @@ import tkinter as tk
 class SurveyApplication(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Опрос")
+        self.title("QuizRunner")
         self.geometry("500x500")
         self.title_quiz()
         self.question_index = 0
