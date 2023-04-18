@@ -25,10 +25,10 @@ class SurveyApplication(tk.Tk):
         # Создаем метку для заголовка опроса
         self.title_label = tk.Label(self, text= "Введите название опроса:")
         self.title_label.pack()
-        self.submit_title_btn = tk.Button(text="Подтвердить", command=self.show_title)
-        self.submit_title_btn.pack()
         self.title_entry = tk.Entry(self)
         self.title_entry.pack()
+        self.submit_title_btn = tk.Button(text="Подтвердить", command=self.show_title)
+        self.submit_title_btn.pack()
         
 
     def create_widgets(self):
@@ -132,12 +132,12 @@ class SurveyApplication(tk.Tk):
     def show_result(self, is_correct):
         # Создаем метку для вывода результата
         question = self.questions[self.question_index]
-        self.question_num_text = (str(self.question_index+1) + ". " + str(question['question']))
+        self.question_num_text = (str(self.question_index+1) + ". Вопрос: " + str(question['question'])+ " Ответ: " + str(question['answer']))
         if is_correct:
             result_text = self.question_num_text + ". " + "Верно!"
             
         else:
-            result_text = str(self.question_index+1) + ". " "Неверно!"
+            result_text = self.question_num_text + ". " "Неверно!"
         result_label = tk.Label(self, text = result_text)
         result_label.pack()
 
