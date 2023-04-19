@@ -1,14 +1,23 @@
 import tkinter as tk
+from PIL import ImageTk, Image
+import os
 
 class SurveyApplication(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("QuizRunner")
         self.geometry("500x500")
+        self.resizable(width=False, height=False)
         self.title_quiz()
+        self.loadbackground()
         self.question_index = 0
         self.questions = []
         self.result_counter = 0
+
+    def loadbackground(self):
+        self.title_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
+        self.title_img_label = tk.Label(self, image = self.title_img, width=500, height=500)
+        self.title_img_label.place(x=0, y=0, relwidth=1, relheight=1) 
 
     def show_title(self):
         #Имя опросику меняем
@@ -17,22 +26,32 @@ class SurveyApplication(tk.Tk):
         #Чистим
         self.title_entry.pack_forget()
         self.submit_title_btn.pack_forget()
+        self.title_img_label.pack_forget()
         #Запускаем
         self.create_widgets()
 
 
     def title_quiz(self):
         # Создаем метку для заголовка опроса
-        self.title_label = tk.Label(self, text= "Введите название опроса:")
+        self.title_label = tk.Label(self, text= "Введите название опроса:", font = (20))
         self.title_label.pack()
         self.title_entry = tk.Entry(self)
         self.title_entry.pack()
-        self.submit_title_btn = tk.Button(text="Подтвердить", command=self.show_title)
+        self.submit_title_btn = tk.Button(text="Подтвердить", command=self.show_title,font = (14))
         self.submit_title_btn.pack()
+        self.title_picture_add()
+    
+    def title_picture_add(self):
+        self.title_img = ImageTk.PhotoImage(Image.open("images/logo v22.jpg"))
+        self.title_img_label = tk.Label(self, image = self.title_img, width=500, height=100)
+        self.title_img_label.pack(  side= tk.BOTTOM,
+                                    fill=tk.BOTH)
+                                    
         
-
     def create_widgets(self):
         
+        #self.resizable(width=True, height=True)
+
         # Создаем метку для вопроса
         self.question_label = tk.Label(self, text="Вопрос")
         self.question_label.pack()
@@ -92,8 +111,6 @@ class SurveyApplication(tk.Tk):
             self.result_counter -= 1
         self.show_result(is_correct)
         
-        
-
         # Очищаем поле для ввода ответа
         self.answer_entry.delete(0, tk.END)
 
@@ -139,7 +156,7 @@ class SurveyApplication(tk.Tk):
         else:
             result_text = self.question_num_text + ". " "Неверно!"
         result_label = tk.Label(self, text = result_text)
-        result_label.pack()
+        result_label.pack(expand=True)
 
 if __name__ == '__main__':
     app = SurveyApplication()
