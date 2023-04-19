@@ -8,16 +8,16 @@ class SurveyApplication(tk.Tk):
         self.title("QuizRunner")
         self.geometry("500x500")
         self.resizable(width=False, height=False)
-        self.title_quiz()
         self.loadbackground()
+        self.title_quiz()
         self.question_index = 0
         self.questions = []
         self.result_counter = 0
 
     def loadbackground(self):
-        self.title_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
-        self.title_img_label = tk.Label(self, image = self.title_img, width=500, height=500)
-        self.title_img_label.place(x=0, y=0, relwidth=1, relheight=1) 
+        self.background_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
+        self.background_img_label = tk.Label(self, image = self.background_img)
+        self.background_img_label.place(x=0, y=0, relwidth=1, relheight=1) 
 
     def show_title(self):
         #Имя опросику меняем
