@@ -17,13 +17,20 @@ class SurveyApplication(tk.Tk):
         self.mainmenu = Menu(self)
         self.config(menu = self.mainmenu)
         self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
+        self.open_file_flag = 0
 
     def open_file(self):
+        self.open_file_flag = 1
+        self.questions_txt = []
         self.filepath = tk.filedialog.askopenfilename()
         if self.filepath != "":
-            with open(self.filepath, "r") as file:
-                text =file.read()
-                self.txtlbl = tk.Label(text = text)
+            with open(self.filepath, "r", encoding="utf-8") as file:
+                # Читаем каждую строку файла и разбиваем ее на вопрос и ответ
+                for line in file.readlines():
+                    question_txt, answer_txt = line.strip().split(", ")
+            # Добавляем вопрос и ответ в список вопросов
+                    self.questions_txt.append([question_txt, answer_txt])
+                self.txtlbl = tk.Label(text = str(self.questions_txt))
                 self.txtlbl.pack()
     
     def loadbackground(self):
@@ -98,17 +105,23 @@ class SurveyApplication(tk.Tk):
         result_count_label.pack(side=tk.BOTTOM)
 
     def add_question(self):
+        if self.open_file_flag == 0:
         # Получаем текст вопроса и ответа
-        question_text = self.question_entry.get()
-        answer_text = self.answer_entry.get()
+            question_text = self.question_entry.get()
+            answer_text = self.answer_entry.get()
 
         # Создаем новый вопрос и добавляем его в список вопросов
-        question = {'question': question_text, 'answer': answer_text}
-        self.questions.append(question)
+            question = {'question': question_text, 'answer': answer_text}
+            self.questions.append(question)
 
         # Очищаем поля для ввода вопроса и ответа
-        self.question_entry.delete(0, tk.END)
-        self.answer_entry.delete(0, tk.END)
+            self.question_entry.delete(0, tk.END)
+            self.answer_entry.delete(0, tk.END)
+        else:
+            question_num = 0
+            question_text = self.questions_txt([0], [question_num])
+            answer_text = self.questions_txt([1], [question_num])
+
 
     def submit_answer(self):
         # Получаем ответ на вопрос
