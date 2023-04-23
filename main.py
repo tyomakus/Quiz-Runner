@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import Menu, filedialog
 from PIL import ImageTk, Image
 import os
 
@@ -13,7 +14,18 @@ class SurveyApplication(tk.Tk):
         self.question_index = 0
         self.questions = []
         self.result_counter = 0
+        self.mainmenu = Menu(self)
+        self.config(menu = self.mainmenu)
+        self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
 
+    def open_file(self):
+        self.filepath = tk.filedialog.askopenfilename()
+        if self.filepath != "":
+            with open(self.filepath, "r") as file:
+                text =file.read()
+                self.txtlbl = tk.Label(text = text)
+                self.txtlbl.pack()
+    
     def loadbackground(self):
         self.background_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
         self.background_img_label = tk.Label(self, image = self.background_img)
