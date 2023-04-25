@@ -130,8 +130,8 @@ class SurveyApplication(tk.Tk):
             question = self.questions[self.question_index]
             is_correct = answer.lower() == question['answer'].lower()
         else:
-            question = self.questions_txt[self.question_num][0]
-            is_correct = (answer.lower() == str(self.questions_txt[self.question_num][1]).lower())
+            question = self.questions_txt[self.question_num-1][0]
+            is_correct = (answer.lower() == str(self.questions_txt[self.question_num-1][1]).lower())
         
         if is_correct:
             self.result_counter += 1
@@ -143,18 +143,32 @@ class SurveyApplication(tk.Tk):
         self.answer_entry.delete(0, tk.END)
 
         # Переключаемся на следующий вопрос (если есть)
-        self.question_index += 1
-        if self.question_index < len(self.questions):
-            question = self.questions[self.question_index]
-            self.title_label.config(text="Опрос")
-            self.question_label.config(text=question['question'])
+        if self.open_file_flag == 0:
+            self.question_index += 1
+            if self.question_index < len(self.questions):
+                question = self.questions[self.question_index]
+                self.title_label.config(text="Опрос")
+                self.question_label.config(text=question['question'])
+            else:
+                self.title_label.config(text="Опрос завершен", font=(14))
+                self.answer_entry.pack_forget()
+                self.answer_label.pack_forget()
+                self.question_label.pack_forget()
+                self.submit_button.pack_forget()
+                self.result_count()
         else:
-            self.title_label.config(text="Опрос завершен", font=(14))
-            self.answer_entry.pack_forget()
-            self.answer_label.pack_forget()
-            self.question_label.pack_forget()
-            self.submit_button.pack_forget()
-            self.result_count()
+            self.question_num += 1
+            if self.question_num < len(self.questions_txt):
+                question = self.questions_txt[self.question_num-1][0]
+                self.title_label.config(text="Опрос")
+                self.question_label.config(text=question)
+            else:
+                self.title_label.config(text="Опрос завершен", font=(14))
+                self.answer_entry.pack_forget()
+                self.answer_label.pack_forget()
+                self.question_label.pack_forget()
+                self.submit_button.pack_forget()
+                self.result_count()
 
         
     def submit_quiz(self):
@@ -185,8 +199,9 @@ class SurveyApplication(tk.Tk):
             question = self.questions[self.question_index]
             self.question_num_text = (str(self.question_index+1) + ". Вопрос: " + str(question['question'])+ " Ответ: " + str(question['answer']))
         if self.open_file_flag:
-            question = self.questions_txt[self.question_num][0]
-            self.question_num_text = ((str(int(self.question_num))) + ". Вопрос: " + str(question)+ " Ответ: " + str(question))
+            question = self.questions_txt[self.question_num-1][0]
+            answer = self.questions_txt[self.question_num-1][1]
+            self.question_num_text = ((str(int(self.question_num))) + ". Вопрос: " + str(question)+ " Ответ: " + str(answer))
         if is_correct:
             result_text = self.question_num_text + ". " + "Верно!"
             
