@@ -20,6 +20,7 @@ class SurveyApplication(tk.Tk):
         self.config(menu = self.mainmenu)
         self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
         self.open_file_flag = 0
+        self.txtlbl = tk.Label()
         
 
     def open_file(self):
@@ -32,7 +33,7 @@ class SurveyApplication(tk.Tk):
                     question_txt, answer_txt = line.strip().split(";- ")
             # Добавляем вопрос и ответ в список вопросов
                     self.questions_txt.append([question_txt, answer_txt])
-                self.txtlbl = tk.Label(text = str(self.questions_txt))
+                self.txtlbl = tk.Label(text = ("Вводите вопросы в формате:\n Вопрос;- Ответ\n Знак разделения ';- '\n Пример:\n Какое имя у самого популярного кота в мире YouTube?;- Мару \n Кто написал роман 1984?;- Джордж Оруэлл "), font = (12), bg= "#85d2c8")
                 self.txtlbl.pack()
     
     def loadbackground(self):
@@ -48,6 +49,7 @@ class SurveyApplication(tk.Tk):
         self.title_entry.pack_forget()
         self.submit_title_btn.pack_forget()
         self.title_img_label.pack_forget()
+        self.txtlbl.pack_forget()
         #Запускаем
         self.create_widgets()
 
@@ -69,10 +71,8 @@ class SurveyApplication(tk.Tk):
                                     fill=tk.BOTH)
                                     
         
+    #self.resizable(width=True, height=True)
     def create_widgets(self):
-        
-        #self.resizable(width=True, height=True)
-
         # Создаем метку для вопроса
         self.question_label = tk.Label(self, text="Вопрос", bg= "#85d2c8")
         self.question_label.pack()
@@ -103,9 +103,11 @@ class SurveyApplication(tk.Tk):
 
     def result_count(self):
     #Считаем общий балл
-        result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter) + "/" + str(len(self.questions))), font=(20), bg= "#85d2c8")
+        if self.open_file_flag == 0:
+            result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter) + "/" + str(len(self.questions))), font=(20), bg= "#85d2c8")
+        else:
+              result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter) + "/" + str(len(self.questions_txt)-1)), font=(20), bg= "#85d2c8")
         result_count_label.pack(side=tk.BOTTOM)
-
     def add_question(self):
         # Получаем текст вопроса и ответа
             question_text = self.question_entry.get()
@@ -156,9 +158,9 @@ class SurveyApplication(tk.Tk):
                 self.question_label.pack_forget()
                 self.submit_button.pack_forget()
                 self.result_count()
-        else:
+        if self.open_file_flag == 1:
             self.question_num += 1
-            if self.question_num < len(self.questions_txt):
+            if self.question_num < (len(self.questions_txt)):
                 question = self.questions_txt[self.question_num-1][0]
                 self.title_label.config(text="Опрос")
                 self.question_label.config(text=question)
@@ -172,25 +174,28 @@ class SurveyApplication(tk.Tk):
 
         
     def submit_quiz(self):
+
+            #Добавляем кнопку ответа
+        self.submit_button.pack()
+        self.question_entry.pack_forget()
+        if self.open_file_flag == 0:
         # Очищаем поля для ввода вопроса и ответа
-            self.question_entry.delete(0, tk.END)
-            self.answer_entry.delete(0, tk.END)
-        #Удаляем кнопку
-            self.submit_quiz_button.destroy()
-        #Добавляем кнопку ответа
-            self.submit_button.pack()
-        #Выводим вопрос
-            if self.open_file_flag == 0:
+                self.question_entry.delete(0, tk.END)
+                self.answer_entry.delete(0, tk.END)
+            #Выводим вопрос
                 question = self.questions[self.question_index]
                 self.question_label.config(text=question['question'])
-            else:
+                #Удаляем лишние кнопочки
+                self.add_question_button.pack_forget()
+                self.submit_quiz_button.destroy()
+                
+        if self.open_file_flag == 1:
+                self.answer_entry.delete(0, tk.END)
                 question = self.questions_txt[self.question_num][0]
-                self.question_label.config(text=(self.questions_txt[self.question_num][0]))
+                self.question_label.config(text=(question))
                 self.question_num += 1
-        #Удаляем лишние кнопочки
-            self.question_entry.pack_forget()
-            self.add_question_button.pack_forget()
-            self.submit_quiz_button.destroy()
+                self.add_question_button.pack_forget()
+                self.submit_quiz_button.destroy()
 
 
     def show_result(self, is_correct):
