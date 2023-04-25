@@ -80,7 +80,6 @@ class SurveyApplication(tk.Tk):
         # Создаем поле для ввода вопроса
         self.question_entry = tk.Entry(self)
         self.question_entry.pack()
-
         # Создаем метку для ответа
         self.answer_label = tk.Label(self, text="Ответ", bg= "#85d2c8")
         self.answer_label.pack()
@@ -101,6 +100,10 @@ class SurveyApplication(tk.Tk):
         self.submit_quiz_button = tk.Button(self, text = "Подтвердить", command=self.submit_quiz)
         self.submit_quiz_button.pack()
 
+        if self.open_file_flag == 1:
+            self.question_entry.pack_forget()
+            self.answer_entry.pack_forget()
+            self.add_question_button.pack_forget()
     def result_count(self):
     #Считаем общий балл
         if self.open_file_flag == 0:
@@ -177,9 +180,10 @@ class SurveyApplication(tk.Tk):
 
             #Добавляем кнопку ответа
         self.submit_button.pack()
-        self.question_entry.pack_forget()
+        
         if self.open_file_flag == 0:
         # Очищаем поля для ввода вопроса и ответа
+                self.question_entry.pack_forget()
                 self.question_entry.delete(0, tk.END)
                 self.answer_entry.delete(0, tk.END)
             #Выводим вопрос
@@ -194,8 +198,8 @@ class SurveyApplication(tk.Tk):
                 question = self.questions_txt[self.question_num][0]
                 self.question_label.config(text=(question))
                 self.question_num += 1
-                self.add_question_button.pack_forget()
                 self.submit_quiz_button.destroy()
+                self.answer_entry.pack()
 
 
     def show_result(self, is_correct):
