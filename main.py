@@ -20,6 +20,7 @@ class SurveyApplication(tk.Tk):
         self.config(menu = self.mainmenu)
         self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
         self.open_file_flag = 0
+        
 
     def open_file(self):
         self.open_file_flag = 1
@@ -28,7 +29,7 @@ class SurveyApplication(tk.Tk):
             with open(self.filepath, "r", encoding="utf-8") as file:
                 # Читаем каждую строку файла и разбиваем ее на вопрос и ответ
                 for line in file.readlines():
-                    question_txt, answer_txt = line.strip().split(", ")
+                    question_txt, answer_txt = line.strip().split(";- ")
             # Добавляем вопрос и ответ в список вопросов
                     self.questions_txt.append([question_txt, answer_txt])
                 self.txtlbl = tk.Label(text = str(self.questions_txt))
@@ -129,8 +130,8 @@ class SurveyApplication(tk.Tk):
             question = self.questions[self.question_index]
             is_correct = answer.lower() == question['answer'].lower()
         else:
-            question = self.questions_txt[0], [self.question_num]
-            is_correct = (answer.lower() == str(self.questions_txt[0],[1]).lower())
+            question = self.questions_txt[self.question_num][0]
+            is_correct = (answer.lower() == str(self.questions_txt[self.question_num][1]).lower())
         
         if is_correct:
             self.result_counter += 1
@@ -169,9 +170,9 @@ class SurveyApplication(tk.Tk):
                 question = self.questions[self.question_index]
                 self.question_label.config(text=question['question'])
             else:
-                question = self.questions_txt[1], [1]
+                question = self.questions_txt[self.question_num][0]
+                self.question_label.config(text=(self.questions_txt[self.question_num][0]))
                 self.question_num += 1
-                self.question_label.config(text=(self.questions_txt[0], [0]))
         #Удаляем лишние кнопочки
             self.question_entry.pack_forget()
             self.add_question_button.pack_forget()
@@ -180,8 +181,12 @@ class SurveyApplication(tk.Tk):
 
     def show_result(self, is_correct):
         # Создаем метку для вывода результата
-        question = self.questions[self.question_index]
-        self.question_num_text = (str(self.question_index+1) + ". Вопрос: " + str(question['question'])+ " Ответ: " + str(question['answer']))
+        if self.open_file_flag == False:
+            question = self.questions[self.question_index]
+            self.question_num_text = (str(self.question_index+1) + ". Вопрос: " + str(question['question'])+ " Ответ: " + str(question['answer']))
+        if self.open_file_flag:
+            question = self.questions_txt[self.question_num][0]
+            self.question_num_text = ((str(int(self.question_num))) + ". Вопрос: " + str(question)+ " Ответ: " + str(question))
         if is_correct:
             result_text = self.question_num_text + ". " + "Верно!"
             
