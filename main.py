@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Menu, filedialog
 from PIL import ImageTk, Image
+from textwrap import wrap
 import os
 
 class SurveyApplication(tk.Tk):
@@ -104,6 +105,9 @@ class SurveyApplication(tk.Tk):
             self.question_entry.pack_forget()
             self.answer_entry.pack_forget()
             self.add_question_button.pack_forget()
+            self.question_label.pack_forget()
+            self.answer_label.pack_forget()
+
     def result_count(self):
     #Считаем общий балл
         if self.open_file_flag == 0:
@@ -124,6 +128,14 @@ class SurveyApplication(tk.Tk):
             self.question_entry.delete(0, tk.END)
             self.answer_entry.delete(0, tk.END)
         
+    def line_switch(self,question):
+        self.update()
+        char_width = 0
+        width_question = self.question_label.winfo_width()
+        if width_question > 200:
+            char_width = width_question / len(question)
+            wrapped_text = '\n'.join(wrap(question, int(200 / char_width)))
+            self.question_label.config(text = wrapped_text)
 
 
     def submit_answer(self):
@@ -167,6 +179,7 @@ class SurveyApplication(tk.Tk):
                 question = self.questions_txt[self.question_num-1][0]
                 self.title_label.config(text="Опрос")
                 self.question_label.config(text=question)
+                self.line_switch(question)
             else:
                 self.title_label.config(text="Опрос завершен", font=(14))
                 self.answer_entry.pack_forget()
@@ -195,11 +208,13 @@ class SurveyApplication(tk.Tk):
                 
         if self.open_file_flag == 1:
                 self.answer_entry.delete(0, tk.END)
+                self.question_label.pack()
                 question = self.questions_txt[self.question_num][0]
                 self.question_label.config(text=(question))
                 self.question_num += 1
                 self.submit_quiz_button.destroy()
                 self.answer_entry.pack()
+
 
 
     def show_result(self, is_correct):
@@ -218,6 +233,13 @@ class SurveyApplication(tk.Tk):
             result_text = self.question_num_text + ". " "Неверно!"
         result_label = tk.Label(self, text = result_text, bg= "#85d2c8")
         result_label.pack(expand=True)
+        self.update()
+        char_width = 0
+        width_question_num_text = result_label.winfo_width()
+        if width_question_num_text > 200:
+            char_width = width_question_num_text / len(self.question_num_text)
+            wrapped_text = '\n'.join(wrap(self.question_num_text, int(200 / char_width)))
+            result_label.config(text = wrapped_text)
 
 if __name__ == '__main__':
     app = SurveyApplication()
