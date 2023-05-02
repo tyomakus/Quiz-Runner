@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import Menu, filedialog
 from PIL import ImageTk, Image
 from textwrap import wrap
+from playsound import playsound
+from threading import Thread
 import os
 
 class SurveyApplication(tk.Tk):
@@ -21,7 +23,10 @@ class SurveyApplication(tk.Tk):
         self.config(menu = self.mainmenu)
         self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
         self.open_file_flag = 0
+        self.music_click_flag = 0
+        self.music_num = 0
         self.txtlbl = tk.Label()
+        self.music_play()
         
 
     def open_file(self):
@@ -37,6 +42,35 @@ class SurveyApplication(tk.Tk):
                 self.txtlbl = tk.Label(text = ("Вводите вопросы в формате:\n Вопрос;- Ответ\n Знак разделения ';- '\n Пример:\n Какое имя у самого популярного кота в мире YouTube?;- Мару \n Кто написал роман 1984?;- Джордж Оруэлл "), font = (12), bg= "#85d2c8")
                 self.txtlbl.pack()
     
+    def music_play(self):
+        if self.music_click_flag == 0:
+            self.music_click_flag = 1
+
+            if self.music_num == 0:
+                #
+                self.music_num += 1
+
+            elif self.music_num == 1:
+                #
+                self.music_num += 1
+
+            elif self.music_num == 2:
+                #
+                self.music_num += 1
+
+            elif self.music_num == 3:
+                #
+                self.music_num += 1
+
+            elif self.music_num == 4:
+                #
+                self.music_num += 1
+        else:
+            self.music_click_flag = 0
+
+        
+            
+
     def loadbackground(self):
         self.background_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
         self.background_img_label = tk.Label(self, image = self.background_img)
@@ -107,6 +141,7 @@ class SurveyApplication(tk.Tk):
             self.add_question_button.pack_forget()
             self.question_label.pack_forget()
             self.answer_label.pack_forget()
+        self.mainmenu.destroy()
 
     def result_count(self):
     #Считаем общий балл
@@ -222,6 +257,8 @@ class SurveyApplication(tk.Tk):
         if self.open_file_flag == False:
             question = self.questions[self.question_index]
             self.question_num_text = (str(self.question_index+1) + ". Вопрос: " + str(question['question'])+ " Ответ: " + str(question['answer']))
+            
+                
         if self.open_file_flag:
             question = self.questions_txt[self.question_num-1][0]
             answer = self.questions_txt[self.question_num-1][1]
@@ -236,10 +273,21 @@ class SurveyApplication(tk.Tk):
         self.update()
         char_width = 0
         width_question_num_text = result_label.winfo_width()
+
         if width_question_num_text > 200:
             char_width = width_question_num_text / len(self.question_num_text)
             wrapped_text = '\n'.join(wrap(self.question_num_text, int(200 / char_width)))
+            wrapped_text = wrapped_text +  ". Верно!" if is_correct else wrapped_text + ". Неверно!"
             result_label.config(text = wrapped_text)
+        if self.open_file_flag == False:
+            #if self.question_index > 8:
+            char_width = width_question_num_text / len(self.question_num_text)
+            result_label.config(font = (char_width))
+            print('aaaaaa')
+        if self.open_file_flag:
+            #if (len(self.questions_txt)-1) > 4:
+            result_label.config(font = (int(200/((len(self.questions_txt)-1)*100))))
+        
 
 if __name__ == '__main__':
     app = SurveyApplication()
