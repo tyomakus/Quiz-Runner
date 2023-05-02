@@ -27,6 +27,7 @@ class SurveyApplication(tk.Tk):
         self.music_num = 0
         self.txtlbl = tk.Label()
         self.music_play()
+        self.result_label_str = ""
         
 
     def open_file(self):
@@ -144,7 +145,10 @@ class SurveyApplication(tk.Tk):
         self.mainmenu.destroy()
 
     def result_count(self):
+        result_label = tk.Label(self, text = self.result_label_str, bg= "#85d2c8")
+        result_label.pack()#expand=True)
     #Считаем общий балл
+
         if self.open_file_flag == 0:
             result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter) + "/" + str(len(self.questions))), font=(20), bg= "#85d2c8")
         else:
@@ -268,26 +272,47 @@ class SurveyApplication(tk.Tk):
             
         else:
             result_text = self.question_num_text + ". " "Неверно!"
-        result_label = tk.Label(self, text = result_text, bg= "#85d2c8")
-        result_label.pack(expand=True)
+        self.result_label_str = self.result_label_str + '\n' + result_text
+        print(self.result_label_str)
+        # result_label = tk.Label(self, text = self.result_label_str, bg= "#85d2c8")
+        # result_label.pack()#expand=True)
         self.update()
-        char_width = 0
-        width_question_num_text = result_label.winfo_width()
+        # char_width = 0
+        # width_question_num_text = result_label.winfo_width()
+        # height_question_num_text = result_label.winfo_height()
 
-        if width_question_num_text > 200:
-            char_width = width_question_num_text / len(self.question_num_text)
-            wrapped_text = '\n'.join(wrap(self.question_num_text, int(200 / char_width)))
-            wrapped_text = wrapped_text +  ". Верно!" if is_correct else wrapped_text + ". Неверно!"
-            result_label.config(text = wrapped_text)
-        if self.open_file_flag == False:
-            #if self.question_index > 8:
-            char_width = width_question_num_text / len(self.question_num_text)
-            result_label.config(font = (char_width))
-            print('aaaaaa')
-        if self.open_file_flag:
-            #if (len(self.questions_txt)-1) > 4:
-            result_label.config(font = (int(200/((len(self.questions_txt)-1)*100))))
-        
+        # if width_question_num_text > 200:
+        #     char_width = width_question_num_text / len(self.question_num_text)
+        #     wrapped_text = '\n'.join(wrap(self.question_num_text, int(200 / char_width)))
+        #     wrapped_text = wrapped_text +  ". Верно!" if is_correct else wrapped_text + ". Неверно!"
+        #     result_label.config(text = wrapped_text)
+        # if height_question_num_text <= 21:
+        #     if self.open_file_flag == False:
+        #         #if self.question_index > 8:
+        #         char_height = height_question_num_text 
+        #         wrapp_text = (self.question_num_text)
+        #         font_size = int(((len(self.questions)*char_height))%10)
+        #         result_label.config(font = ("Arial", font_size))
+        #         print(str(font_size) + " -------- Font size")
+        #         print(str(len(self.questions)) + "-------- Len questions")
+        #         print(str(char_height) + " -------- Char height")
+        #         print(str(self.question_index) + " -------- Question_index")
+        #         print(str(height_question_num_text) + " -------- Height_question_num_text")
+        #         print("----------------------------------------------------------------")
+        #         self.update()
+        #     if self.open_file_flag:
+        #         char_height = height_question_num_text 
+        #         wrapp_text = (self.question_num_text)
+        #         font_size = int(((len(self.questions_txt)*char_height))%char_height)
+        #         result_label.config(font = ("Arial", font_size))
+        #         print(str(font_size) + " -------- Font size")
+        #         print(str(len(self.questions_txt)) + "-------- Len questions")
+        #         print(str(char_height) + " -------- Char height")
+        #         #print(str(self.question_index) + " -------- Question_index")
+        #         print(str(height_question_num_text) + " -------- Height_question_num_text")
+        #         print("----------------------------------------------------------------")
+        #         self.update()
+        # self.update()
 
 if __name__ == '__main__':
     app = SurveyApplication()
