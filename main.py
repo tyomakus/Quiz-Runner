@@ -146,6 +146,7 @@ class SurveyApplication(tk.Tk):
             char_width = width_question / len(question)
             wrapped_text = '\n'.join(wrap(question, int(200 / char_width)))
             self.question_label.config(text = wrapped_text)
+        return width_question
 
 
     def submit_answer(self):
