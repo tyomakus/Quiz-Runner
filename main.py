@@ -26,7 +26,6 @@ class SurveyApplication(tk.Tk):
         self.music_click_flag = 0
         self.music_num = 0
         self.txtlbl = tk.Label()
-        self.music_play()
         self.result_label_str = ""
         
 
@@ -42,35 +41,7 @@ class SurveyApplication(tk.Tk):
                     self.questions_txt.append([question_txt, answer_txt])
                 self.txtlbl = tk.Label(text = ("Вводите вопросы в формате:\n Вопрос;- Ответ\n Знак разделения ';- '\n Пример:\n Какое имя у самого популярного кота в мире YouTube?;- Мару \n Кто написал роман 1984?;- Джордж Оруэлл "), font = (12), bg= "#85d2c8")
                 self.txtlbl.pack()
-    
-    def music_play(self):
-        if self.music_click_flag == 0:
-            self.music_click_flag = 1
-
-            if self.music_num == 0:
-                #
-                self.music_num += 1
-
-            elif self.music_num == 1:
-                #
-                self.music_num += 1
-
-            elif self.music_num == 2:
-                #
-                self.music_num += 1
-
-            elif self.music_num == 3:
-                #
-                self.music_num += 1
-
-            elif self.music_num == 4:
-                #
-                self.music_num += 1
-        else:
-            self.music_click_flag = 0
-
-        
-            
+             
 
     def loadbackground(self):
         self.background_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
@@ -274,8 +245,8 @@ class SurveyApplication(tk.Tk):
             result_text = self.question_num_text + ". " "Неверно!"
         self.result_label_str = self.result_label_str + '\n' + result_text
         print(self.result_label_str)
-        # result_label = tk.Label(self, text = self.result_label_str, bg= "#85d2c8")
-        # result_label.pack()#expand=True)
+        #result_label = tk.Label(self, text = self.result_label_str, bg= "#85d2c8")
+        #result_label.pack()#expand=True)
         self.update()
         # char_width = 0
         # width_question_num_text = result_label.winfo_width()
