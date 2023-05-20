@@ -11,7 +11,7 @@ class TestMain(unittest.TestCase):
         geom = SurveyApplication.geometry
         self.assertNotEqual(geom, "500x500")
     def width_test(self):
-        width =  SurveyApplication.width_question
+        width =  SurveyApplication.line_switch(width_question)
         self.assertTrue(width <= 500)
     def result_test(self):
         result =  SurveyApplication.result_counter

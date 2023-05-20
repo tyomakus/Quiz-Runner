@@ -23,8 +23,6 @@ class SurveyApplication(tk.Tk):
         self.config(menu = self.mainmenu)
         self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
         self.open_file_flag = 0
-        self.music_click_flag = 0
-        self.music_num = 0
         self.txtlbl = tk.Label()
         self.result_label_str = ""
         
