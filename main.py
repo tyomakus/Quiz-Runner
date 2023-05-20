@@ -22,6 +22,7 @@ class SurveyApplication(tk.Tk):
         self.mainmenu.add_command(label='Открыть опрос из файла', command = self.open_file)
         self.open_file_flag = 0
         self.txtlbl = tk.Label()
+        self.result_label_str = ""
         
 
     def open_file(self):
@@ -36,7 +37,8 @@ class SurveyApplication(tk.Tk):
                     self.questions_txt.append([question_txt, answer_txt])
                 self.txtlbl = tk.Label(text = ("Вводите вопросы в формате:\n Вопрос;- Ответ\n Знак разделения ';- '\n Пример:\n Какое имя у самого популярного кота в мире YouTube?;- Мару \n Кто написал роман 1984?;- Джордж Оруэлл "), font = (12), bg= "#85d2c8")
                 self.txtlbl.pack()
-    
+             
+
     def loadbackground(self):
         self.background_img = ImageTk.PhotoImage(Image.open("images/background.jpg"))
         self.background_img_label = tk.Label(self, image = self.background_img)
@@ -72,7 +74,6 @@ class SurveyApplication(tk.Tk):
                                     fill=tk.BOTH)
                                     
         
-    #self.resizable(width=True, height=True)
     def create_widgets(self):
         # Создаем метку для вопроса
         self.question_label = tk.Label(self, text="Вопрос", bg= "#85d2c8")
@@ -107,9 +108,13 @@ class SurveyApplication(tk.Tk):
             self.add_question_button.pack_forget()
             self.question_label.pack_forget()
             self.answer_label.pack_forget()
+        self.mainmenu.destroy()
 
     def result_count(self):
+        result_label = tk.Label(self, text = self.result_label_str, bg= "#85d2c8")
+        result_label.pack()
     #Считаем общий балл
+
         if self.open_file_flag == 0:
             result_count_label = tk.Label(self, text = ("Общий балл: " + str(self.result_counter) + "/" + str(len(self.questions))), font=(20), bg= "#85d2c8")
         else:
@@ -136,13 +141,13 @@ class SurveyApplication(tk.Tk):
             char_width = width_question / len(question)
             wrapped_text = '\n'.join(wrap(question, int(200 / char_width)))
             self.question_label.config(text = wrapped_text)
+        return width_question
 
 
     def submit_answer(self):
         # Получаем ответ на вопрос
         answer = self.answer_entry.get()
         # Обрабатываем ответ на вопрос
-        # Здесь можно сохранять ответы в базу данных или файл
         if self.open_file_flag == 0:
             question = self.questions[self.question_index]
             is_correct = answer.lower() == question['answer'].lower()
@@ -222,6 +227,8 @@ class SurveyApplication(tk.Tk):
         if self.open_file_flag == False:
             question = self.questions[self.question_index]
             self.question_num_text = (str(self.question_index+1) + ". Вопрос: " + str(question['question'])+ " Ответ: " + str(question['answer']))
+            
+                
         if self.open_file_flag:
             question = self.questions_txt[self.question_num-1][0]
             answer = self.questions_txt[self.question_num-1][1]
@@ -231,15 +238,19 @@ class SurveyApplication(tk.Tk):
             
         else:
             result_text = self.question_num_text + ". " "Неверно!"
+        #self.result_label_str = self.result_label_str + '\n' + result_text
+        print(self.result_label_str)
         result_label = tk.Label(self, text = result_text, bg= "#85d2c8")
-        result_label.pack(expand=True)
+        result_label.pack()#expand=True)
         self.update()
-        char_width = 0
         width_question_num_text = result_label.winfo_width()
+
         if width_question_num_text > 200:
             char_width = width_question_num_text / len(self.question_num_text)
             wrapped_text = '\n'.join(wrap(self.question_num_text, int(200 / char_width)))
+            wrapped_text = wrapped_text +  ". Верно!" if is_correct else wrapped_text + ". Неверно!"
             result_label.config(text = wrapped_text)
+
 
 if __name__ == '__main__':
     app = SurveyApplication()
