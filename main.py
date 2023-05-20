@@ -2,8 +2,6 @@ import tkinter as tk
 from tkinter import Menu, filedialog
 from PIL import ImageTk, Image
 from textwrap import wrap
-#from playsound import playsound
-from threading import Thread
 import os
 
 class SurveyApplication(tk.Tk):
