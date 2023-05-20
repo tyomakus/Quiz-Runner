@@ -78,7 +78,6 @@ class SurveyApplication(tk.Tk):
                                     fill=tk.BOTH)
                                     
         
-    #self.resizable(width=True, height=True)
     def create_widgets(self):
         # Создаем метку для вопроса
         self.question_label = tk.Label(self, text="Вопрос", bg= "#85d2c8")
@@ -117,7 +116,7 @@ class SurveyApplication(tk.Tk):
 
     def result_count(self):
         result_label = tk.Label(self, text = self.result_label_str, bg= "#85d2c8")
-        result_label.pack()#expand=True)
+        result_label.pack()
     #Считаем общий балл
 
         if self.open_file_flag == 0:
@@ -153,7 +152,6 @@ class SurveyApplication(tk.Tk):
         # Получаем ответ на вопрос
         answer = self.answer_entry.get()
         # Обрабатываем ответ на вопрос
-        # Здесь можно сохранять ответы в базу данных или файл
         if self.open_file_flag == 0:
             question = self.questions[self.question_index]
             is_correct = answer.lower() == question['answer'].lower()
@@ -249,7 +247,6 @@ class SurveyApplication(tk.Tk):
         result_label = tk.Label(self, text = result_text, bg= "#85d2c8")
         result_label.pack()#expand=True)
         self.update()
-        # char_width = 0
         width_question_num_text = result_label.winfo_width()
 
         if width_question_num_text > 200:
