@@ -4,6 +4,8 @@
 
 
 
+## "Run towards knowledge and become a champion with Quiz Runner - the ultimate quiz app!"
+
 ## What is it?
 QuizRunner is quiz application that allows users to easily and quickly create interactive quizzes on various topics and share them with others. 
 The app also allows users to participate in surveys, answer questions, and check their results.
