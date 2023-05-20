@@ -1,4 +1,3 @@
-tkinter
+tk
 pillow
-textwrap
-os
+textwrap3
