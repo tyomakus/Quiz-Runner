@@ -13,6 +13,9 @@ class TestMain(unittest.TestCase):
     def width_test(self):
         width =  SurveyApplication.width_question
         self.assertTrue(width <= 500)
+    def result_test(self):
+        result =  SurveyApplication.result_counter
+        self.assertEqual(result, 0)
 
     # Executing the tests in the above test case class
 if __name__ == "__main__":
